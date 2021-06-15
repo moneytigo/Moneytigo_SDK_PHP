@@ -91,5 +91,10 @@ class Payment {
     $response = $this->client->request( 'POST', $url, [ 'headers' => $this->headers, 'form_params' => $postParameters ] );
     return $response;
   }
+	
+	 public function generateConnectURL() :array
+    {
+	 echo "julien";
+	 }
 
 }
