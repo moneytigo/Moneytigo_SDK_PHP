@@ -92,10 +92,10 @@ class Payment {
     return $response;
   }
 	
-	 public function startProcess() :array
+	 public function startProcess($body) :array
     {
-		 
-		 echo $this->apiuri;
+		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
+		print_r($responses);	  
 	 echo "julien";
 	 }
 
