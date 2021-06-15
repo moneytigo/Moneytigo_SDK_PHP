@@ -88,7 +88,7 @@ class Payment {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function postForm( $url, $postParameters = false ) {
-    $response = $this->client->request( 'POST', $url, [ 'body' => $postParameters ] );
+    $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
     return $response;
   }
 	
