@@ -94,6 +94,8 @@ class Payment {
 	
 	 public function startProcess() :array
     {
+		 
+		 echo $this->apiuri;
 	 echo "julien";
 	 }
 
