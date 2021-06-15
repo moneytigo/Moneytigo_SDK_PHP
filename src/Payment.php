@@ -88,12 +88,13 @@ class Payment {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function postForm( $url, $postParameters = false ) {
-    $response = $this->client->request( 'POST', $url, [ 'headers' => $this->headers, 'form_params' => $postParameters ] );
+    $response = $this->client->request( 'POST', $url, [ 'body' => $postParameters ] );
     return $response;
   }
 	
 	 public function startProcess($body) :array
     {
+		 print_r($body);
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
 		echo $responses->getBody();
 	 }
