@@ -1,20 +1,24 @@
 {
     "name": "moneytigo/payment",
+    "type": "library",
     "description": "Composer Library for payment gateway MoneyTigo.com",
-    "keywords": ["moneytigo", "ipspayment", "ips-payment", "payment gateway", "card processing"],
+    "homepage": "https://github.com/moneytigo/Moneytigo_SDK_PHP",
+    "keywords": ["moneytigo", "ipspayment", "ips-payment", "payment gateway", "card processing", "payment", "bank"],
     "license": "MIT",
     "authors": [
         {
             "name": "IPS INTERNATIONNAL SAS",
-            "email": "hello@moneytigo.com"
+            "email": "hello@moneytigo.com",
+            "homepage": "https://www.moneytigo.com"
         }
     ],
-    "require": {
-        "php": ">=5.4.0"
-    },
+  "require": {
+    "php": ">=7.0",
+    "guzzlehttp/guzzle": "^6.4"
+  },
     "autoload": {
-        "psr-0": {
-            "Fk": "src/"
+        "psr-4": {
+            "Moneytigo\\": "src"
         }
     }
 }
