@@ -92,7 +92,7 @@ class Payment {
     return $response;
   }
 	
-	 public function generateConnectURL() :array
+	 public function startProcess() :array
     {
 	 echo "julien";
 	 }
