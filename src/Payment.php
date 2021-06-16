@@ -3,81 +3,25 @@
 /**
  * Class Moneytigo Payment
  * v 1.0.1 - 2021-06-15
- *
+ * This class allows the initialization of a payment to retrieve the token needed to use MoneyTigo libraries
  */
 
 namespace moneytigo;
 
 class Payment {
 
-  public $customer;
+  /**
+   * Initialization of the minimum required identification parameters
+   */
   public $beforesign;
 
   public function __construct( $params ) {
-
-    $this->apiuri = "https://payment.moneytigo.com";
+    $this->apiuri = $params[ 'API' ];
     $this->merchantkey = $params[ 'MerchantKey' ];
     $this->secretkey = $params[ 'SecretKey' ];
     $this->client = new\ GuzzleHttp\ Client();
   }
 
-  /**
-   * Function to generate a Universal Unique ID (UUID)
-   *
-   * @return string - a UUID
-   */
-
-  private function gen_uuid() {
-    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-      // 32 bits for "time_low"
-      mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
-
-      // 16 bits for "time_mid"
-      mt_rand( 0, 0xffff ),
-
-      // 16 bits for "time_hi_and_version",
-      // four most significant bits holds version number 4
-      mt_rand( 0, 0x0fff ) | 0x4000,
-
-      // 16 bits, 8 bits for "clk_seq_hi_res",
-      // 8 bits for "clk_seq_low",
-      // two most significant bits holds zero and one for variant DCE1.1
-      mt_rand( 0, 0x3fff ) | 0x8000,
-
-      // 48 bits for "node"
-      mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
-    );
-  }
-
-  /**
-   * Do a Get http query
-   *
-   * @param $url
-   * @return mixed|\Psr\Http\Message\ResponseInterface
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  private function get( $url, $generateHeaders = true ) {
-    $method = 'GET';
-    if ( $generateHeaders == true ) {
-      $this->generateHeaders( $method );
-    }
-    $response = $this->client->request( $method, $url, [ 'headers' => $this->headers ] );
-    return $response;
-  }
-  /**
-   * Do a Raw Post of a JSON content
-   *
-   * @param $url
-   * @param bool $body
-   * @return mixed|\Psr\Http\Message\ResponseInterface
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  private function postJson( $url, $body = false ) {
-    $method = 'POST';
-    $this->generateHeaders( $method, $body );
-    $response = $this->client->request( $method, $url, [ 'headers' => $this->headers, 'json' => $body ] );
-    return $response;
-  }
 
   /**
    * Do a urlencoded form POST
@@ -86,52 +30,62 @@ class Payment {
    * @param bool $postParameters
    * @return mixed|\Psr\Http\Message\ResponseInterface
    * @throws \GuzzleHttp\Exception\GuzzleException
+   * And auto convert to json and decoding for final result and simplifie to rest on class
    */
   private function postForm( $url, $postParameters = false ) {
-    $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
-    echo $response->getStatusCode();
-	  //print_r($response);
-	  exit();
-	  //return $response;
+
+
+    try {
+
+      $postRequest = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
+    } catch ( \GuzzleHttp\ Exception\ RequestException $e ) {
+      $postRequest = $e->getResponse();
+    }
+    if ( $postRequest->getBody() && $postRequest->getStatusCode() ) {
+      $returnArr = array();
+      $responsesObjet = json_decode( ( string )$postRequest->getBody() );
+      foreach ( $responsesObjet as $key => $value ) {
+        $returnArr[ $key ] = $value;
+      }
+      $returnArr[ 'http' ] = $postRequest->getStatusCode();
+      return $returnArr;
+    }
+    return $returnArr;
+
+
   }
   /**
-   * Genération de la clé SHA de sécurité
-   *
-   * @param return $postParameters with SHA encryption
+   * Generation of the SHA security key
+   * Encryption of information in order to anonymize parameters for the frontend user
+   * @param return $data with SHA encryption
    */
-private function signRequest($data, $beforesign = "")
-{
-foreach ($data as $key => $value)
-{
-$beforesign .= $value."!";
-}
-$beforesign .= $this->secretkey;
- 
-$sign = hash("sha512", base64_encode($beforesign."|".$this->secretkey));
-$data['SHA'] = hash("sha512", base64_encode($beforesign."|".$this->secretkey));
-return $data;
-}
-	 public function startProcess($body) :array
-    {
-		 
-		 
-		$PostVars = $this->signRequest($body); 
-		$responses = $this->postForm($this->apiuri."/init_transactions/", $PostVars); 
-		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
-		{
-			$returnArr = array();
-			$responsesObjet = json_decode((string)$responses->getBody());
-			foreach($responsesObjet as $key => $value)
-			{
-				$returnArr[$key] = $value;
-			}
-			
-			return $returnArr;
-		}
-		else
-		{
-			echo $responses->getStatusCode();	
-		}
-	}
+  private function signRequest( $data, $beforesign = "" ) {
+    foreach ( $data as $key => $value ) {
+      $beforesign .= $value . "!";
+    }
+    $beforesign .= $this->secretkey;
+
+    $sign = hash( "sha512", base64_encode( $beforesign . "|" . $this->secretkey ) );
+    $data[ 'SHA' ] = hash( "sha512", base64_encode( $beforesign . "|" . $this->secretkey ) );
+    return $data;
+  }
+
+  /**
+   * Main function for initiating a token to start a web or iframe payment or via MoneyTigo libraries.
+   * Public @
+   */
+  public function startProcess( $body ): array {
+    $PostVars = $this->signRequest( $body );
+    $responses = $this->postForm( $this->apiuri . "/init_transactions/", $PostVars );
+    if ( $responses[ 'Code' ] === "200" ) {
+      return $responses;
+
+    } else {
+      return $responses;
+    }
+
+
+  }
+
 
 }
