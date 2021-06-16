@@ -22,7 +22,7 @@ The simplest usage of the library would be as follow:
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$StartPayment = new Moneytigo\Payment([
+$Moneytigo = new Moneytigo\Payment([
 'MerchantKey' => '<your-merchant-key>',
 'SecretKey' => '<your-secret-key>',
 'API' => 'https://payment.moneytigo.com'
@@ -34,7 +34,7 @@ $data = [
 	'Customer_Email' => 'teste45678456@gmail.com'
 ];
 
-$reponse = $StartPayment->startProcess($data); //this for retriewe authorization token 
+$reponse = $Moneytigo->initializePayment($data); 
 
 if($reponse['http'] === 201)
 {
@@ -56,3 +56,31 @@ else
 
 Optional :
 You can verify the status of the payment to see if the payment is done.
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$Moneytigo = new Moneytigo\Payment([
+'MerchantKey' => '<your-merchant-key>',
+'SecretKey' => '<your-secret-key>',
+'API' => 'https://payment.moneytigo.com'
+]);
+
+$data = [
+	'MerchantOrderId' => 'teste123456123'
+];
+
+$reponse = $Moneytigo->getStatusPayment($data); 
+
+if($reponse['http'] === 201) {
+	print_r($reponse); //Displays the result of the transaction
+}
+else
+{
+	//An error has occurred you can see the reason
+	echo "MoneyTigo CODE : ".$reponse['ErrorCode']."<br>";
+	echo "Short error description :".$reponse['ErrorDescription']."<br>";
+}
+```
