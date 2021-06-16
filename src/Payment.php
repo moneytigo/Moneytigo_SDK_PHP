@@ -91,7 +91,12 @@ class Payment {
     $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
     return $response;
   }
-public function signRequest($data)
+  /**
+   * Genération de la clé SHA de sécurité
+   *
+   * @param return $postParameters with SHA encryption
+   */
+private function signRequest($data)
 {
 foreach ($data as $key => $value)
 {
@@ -105,8 +110,8 @@ return $data;
 }
 	 public function startProcess($body) :array
     {
-		 
-		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
+		$PostVars = $this->signRequest($body); 
+		$responses = $this->postForm($this->apiuri."/init_transactions/", $PostVars); 
 		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
 			echo $responses->getBody();
