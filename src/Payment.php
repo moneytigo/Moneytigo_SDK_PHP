@@ -96,9 +96,8 @@ class Payment {
    *
    * @param return $postParameters with SHA encryption
    */
-private function signRequest($data)
+private function signRequest($data, $beforesign = "")
 {
-$beforesign;
 foreach ($data as $key => $value)
 {
 $beforesign .= $value."!";
