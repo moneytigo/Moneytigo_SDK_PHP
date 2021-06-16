@@ -96,7 +96,10 @@ class Payment {
     {
 		 
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
-		echo $responses;
-	 }
+		return array(
+		"http"=>$responses->getHeader(),
+		"data" => $responses->getBody()
+		)
+	}
 
 }
