@@ -96,7 +96,7 @@ class Payment {
     {
 		 
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
-		echo $responses->getBody();
+		echo $responses;
 	 }
 
 }
