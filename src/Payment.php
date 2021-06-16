@@ -98,6 +98,7 @@ class Payment {
    */
 private function signRequest($data)
 {
+$beforesign;
 foreach ($data as $key => $value)
 {
 $beforesign .= $value."!";
