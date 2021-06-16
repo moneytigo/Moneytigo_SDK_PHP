@@ -75,6 +75,7 @@ class Payment {
    * Public @
    */
   public function startProcess( $body ): array {
+    $body[ 'MerchantKey' ] = $this->merchantkey;
     $PostVars = $this->signRequest( $body );
     $responses = $this->postForm( $this->apiuri . "/init_transactions/", $PostVars );
     if ( $responses[ 'Code' ] === "200" ) {
