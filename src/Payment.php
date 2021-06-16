@@ -96,7 +96,7 @@ class Payment {
     {
 		 
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
-		if($responses->getBody() && $responses->getStatusCode() == 200)
+		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
 			echo $responses->getBody();
 		}
