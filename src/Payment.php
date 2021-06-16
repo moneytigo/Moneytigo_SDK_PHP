@@ -11,7 +11,7 @@ namespace moneytigo;
 class Payment {
 
   public $customer;
-
+  public $beforesign;
 
   public function __construct( $params ) {
 
@@ -91,7 +91,18 @@ class Payment {
     $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
     return $response;
   }
-	
+public function signRequest($data)
+{
+foreach ($data as $key => $value)
+{
+$beforesign .= $value."!";
+}
+$beforesign .= $this->secretkey;
+ 
+$sign = hash("sha512", base64_encode($beforesign."|".$this->secretkey));
+$data['SHA'] = hash("sha512", base64_encode($beforesign."|".$this->secretkey));
+return $data;
+}
 	 public function startProcess($body) :array
     {
 		 
