@@ -114,7 +114,7 @@ return $data;
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $PostVars); 
 		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
-			echo $responses->getBody();
+			echo $responses->json();
 		}
 		else
 		{
