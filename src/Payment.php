@@ -21,7 +21,37 @@ class Payment {
     $this->secretkey = $params[ 'SecretKey' ];
     $this->client = new\ GuzzleHttp\ Client();
   }
+  /**
+   * GET request to MoneyTigo
+   *
+   * @param $url
+   * @param bool $postParameters
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   * And auto convert to json and decoding for final result and simplifie to rest on class
+   */
+  private function getRequest( $url, $postParameters = false ) {
 
+
+    try {
+
+      $postRequest = $this->client->request( 'GET', $url, [ 'query' => $postParameters ] );
+    } catch ( \GuzzleHttp\ Exception\ RequestException $e ) {
+      $postRequest = $e->getResponse();
+    }
+    if ( $postRequest->getBody() && $postRequest->getStatusCode() ) {
+      $returnArr = array();
+      $responsesObjet = json_decode( ( string )$postRequest->getBody() );
+      foreach ( $responsesObjet as $key => $value ) {
+        $returnArr[ $key ] = $value;
+      }
+      $returnArr[ 'http' ] = $postRequest->getStatusCode();
+      return $returnArr;
+    }
+    return $returnArr;
+
+
+  }
 
   /**
    * Do a urlencoded form POST
@@ -54,6 +84,7 @@ class Payment {
 
 
   }
+
   /**
    * Generation of the SHA security key
    * Encryption of information in order to anonymize parameters for the frontend user
@@ -74,7 +105,7 @@ class Payment {
    * Main function for initiating a token to start a web or iframe payment or via MoneyTigo libraries.
    * Public @
    */
-  public function startProcess( $body ): array {
+  public function initializePayment( $body ): array {
     $body[ 'MerchantKey' ] = $this->merchantkey;
     $PostVars = $this->signRequest( $body );
     $responses = $this->postForm( $this->apiuri . "/init_transactions/", $PostVars );
@@ -86,6 +117,16 @@ class Payment {
     }
 
 
+  }
+  /**
+   *Function to know the status of a payment according to your own reference @RefOrder
+   */
+  public function getStatusPayment( $body ) {
+    $bodytosign[ 'ApiKey' ] = $this->merchantkey;
+    $bodytosign[ 'MerchantOrderId' ] = $body[ 'MerchantOrderId' ];
+    $signed = $this->signRequest( $bodytosign );
+    $responses = $this->getRequest( $this->apiuri . "/transactions_by_merchantid/", $signed );
+    return $responses;
   }
 
 
