@@ -29,9 +29,9 @@ $Moneytigo = new Moneytigo\Payment([
 ]);
 
 $data = [
-	'amount' => '10',
-	'RefOrder' => '123',
-	'Customer_Email' => 'teste45678456@gmail.com'
+	'amount' => '<amount-transaction>',
+	'RefOrder' => '<your-reference-order-id>',
+	'Customer_Email' => '<customer-email>
 ];
 
 $reponse = $Moneytigo->initializePayment($data); 
@@ -69,7 +69,7 @@ $Moneytigo = new Moneytigo\Payment([
 ]);
 
 $data = [
-	'MerchantOrderId' => 'teste123456123'
+	'MerchantOrderId' => '<your-reference-order-id>'
 ];
 
 $reponse = $Moneytigo->getStatusPayment($data); 
@@ -83,4 +83,30 @@ else
 	echo "MoneyTigo CODE : ".$reponse['ErrorCode']."<br>";
 	echo "Short error description :".$reponse['ErrorDescription']."<br>";
 }
+```
+
+Instant payment notification (IPN)
+==================================
+
+If you want you can dynamically configure a URL that MoneyTigo will call automatically at the end of the payment to notify your server of the result of the transaction.
+
+All you have to do is add a parameter when initiating the payment.
+
+With the above example the payment parameters were :
+```
+$data = [
+	'amount' => '<amount-transaction>',
+	'RefOrder' => '<your-reference-order-id>',
+	'Customer_Email' => '<customer-email>
+];
+```
+
+By adding the notification url it would become : 
+```
+$data = [
+	'amount' => '<amount-transaction>',
+	'RefOrder' => '<your-reference-order-id>',
+	'Customer_Email' => '<customer-email>,
+	'urlIPN' => '<votre-url-de-notification>'
+];
 ```
