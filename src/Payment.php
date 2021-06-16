@@ -89,7 +89,10 @@ class Payment {
    */
   private function postForm( $url, $postParameters = false ) {
     $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
-    return $response;
+    
+	  print_r($response);
+	  exit();
+	  //return $response;
   }
   /**
    * Genération de la clé SHA de sécurité
