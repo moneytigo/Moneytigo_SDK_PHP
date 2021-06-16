@@ -1,8 +1,6 @@
 MoneyTigo is a payment solution powered by the Fintech IPS INTERNATIONAL available at :  [https://www.moneytigo.com/].
 This library is a PHP Client for the Moneytigo API. It allows you to initiate a payment via Moneytigo credit card solution.
 
-<b>Api DOCUMENTATION :</b> [https://documentation.moneytigo.com]
-
 Installation
 ============
 
