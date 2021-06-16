@@ -96,10 +96,11 @@ class Payment {
     {
 		 
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $body); 
+		
 		 
 		 echo $responses->getStatusCode();
 		if ($responses->getBody()) {
-    echo $response->getBody();
+    echo $responses->getBody();
     // JSON string: { ... }
 }
 		 
