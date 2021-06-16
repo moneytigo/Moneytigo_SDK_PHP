@@ -75,12 +75,12 @@ $data = [
 $reponse = $Moneytigo->getStatusPayment($data); 
 
 if($reponse['http'] === 201) {
-		print_r($reponse); //Displays the result of the transaction
-	}
-	else
-	{
+	print_r($reponse); //Displays the result of the transaction
+}
+else
+{
 	//An error has occurred you can see the reason
 	echo "MoneyTigo CODE : ".$reponse['ErrorCode']."<br>";
 	echo "Short error description :".$reponse['ErrorDescription']."<br>";
-	}
+}
 ```
