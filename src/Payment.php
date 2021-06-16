@@ -117,7 +117,7 @@ return $data;
 		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
 			$responsesObjet = json_decode((string)$responses->getBody());
-			return $responsesObjet;
+			print_r($responsesObjet);
 		}
 		else
 		{
