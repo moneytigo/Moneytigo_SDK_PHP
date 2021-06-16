@@ -110,11 +110,14 @@ return $data;
 }
 	 public function startProcess($body) :array
     {
+		 
+		 
 		$PostVars = $this->signRequest($body); 
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $PostVars); 
 		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
-			echo $responses->getBody();
+			$responsesObjet = json_decode((string)$responses->getBody());
+			return $responsesObjet;
 		}
 		else
 		{
