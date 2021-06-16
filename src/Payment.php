@@ -99,7 +99,8 @@ class Payment {
 		return array(
 		"http"=>$responses->getHeader(),
 		"data" => $responses->getBody()
-		)
+		);
+		 
 	}
 
 }
