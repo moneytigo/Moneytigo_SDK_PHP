@@ -89,8 +89,8 @@ class Payment {
    */
   private function postForm( $url, $postParameters = false ) {
     $response = $this->client->request( 'POST', $url, [ 'form_params' => $postParameters ] );
-    
-	  print_r($response);
+    echo $response->getStatusCode();
+	  //print_r($response);
 	  exit();
 	  //return $response;
   }
