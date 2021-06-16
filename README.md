@@ -34,7 +34,7 @@ $data = [
 	'Customer_Email' => 'teste45678456@gmail.com'
 ];
 
-$reponse = $Moneytigo->initializePayment($data); //this for retriewe authorization token 
+$reponse = $Moneytigo->initializePayment($data); 
 
 if($reponse['http'] === 201)
 {
