@@ -116,8 +116,14 @@ return $data;
 		$responses = $this->postForm($this->apiuri."/init_transactions/", $PostVars); 
 		if($responses->getBody() && ($responses->getStatusCode() == 200 || $responses->getStatusCode() == 201))
 		{
+			$returnArr = array();
 			$responsesObjet = json_decode((string)$responses->getBody());
-			print_r($responsesObjet);
+			foreach($responsesObjet as $key => $value)
+			{
+				$returnArr[$key] = $value;
+			}
+			
+			return $returnArr;
 		}
 		else
 		{
