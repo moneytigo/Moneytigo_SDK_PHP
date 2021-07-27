@@ -29,7 +29,9 @@ $Moneytigo = new Moneytigo\Payment([
 $data = [
 	'amount' => '<amount-transaction>',
 	'RefOrder' => '<your-reference-order-id>',
-	'Customer_Email' => '<customer-email>
+	'Customer_Email' => '<customer-email>,
+	'Customer_Name' => '<customer-lastname>,
+	'Customer_FirstName' => '<customer-firstname>'
 ];
 
 $reponse = $Moneytigo->initializePayment($data); 
@@ -109,3 +111,5 @@ $data = [
 	'urlIPN' => '<votre-url-de-notification>'
 ];
 ```
+
+Please note that the minimum required parameters are : amount,RefOrder,Customer_Email,Customer_Name,Customer_FirstName
