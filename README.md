@@ -29,8 +29,8 @@ $Moneytigo = new Moneytigo\Payment([
 $data = [
 	'amount' => '<amount-transaction>',
 	'RefOrder' => '<your-reference-order-id>',
-	'Customer_Email' => '<customer-email>,
-	'Customer_Name' => '<customer-lastname>,
+	'Customer_Email' => '<customer-email>',
+	'Customer_Name' => '<customer-lastname>',
 	'Customer_FirstName' => '<customer-firstname>'
 ];
 
